@@ -1,0 +1,99 @@
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+<style>
+    table, th, td {
+      border:1px solid black;
+      text-align: center;
+    }
+    a:hover{
+        border:2px solid black;  
+    }
+
+</style>
+
+<body>
+  <%- include("./partials/nav.ejs") %>
+
+  <div class="details content">
+
+    <h2><%= student.name %></h2>
+
+    <div class="content">
+      <p><b>Student ID: </b><%= student.studentID %></p>
+      <p><b>Student RFID: </b><%= student.RFID %></p>
+      <p><b>Checked In: </b><%= student.checkedIn %></p>
+    </div>
+
+    <table style='width:65%'>
+        <tr>
+            <th>Date</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Hours</th>
+          </tr>
+        <% if (student.date.length > 0) { %>
+            <% for (let row = 0; row < student.date.length; row++) { %>
+                <tr>
+                    <td><%=student.date[row]%></td>
+                    <td><%=student.checkIn[row]%></td>
+                    <td><%=student.checkOut[row]%></td>
+                    <td><%=student.hours[row]%></td>
+                </tr>
+        <% }} %>
+        </table>
+    
+    <br>
+    <a class = "checkIn" data-doc = "<%= student.id %>"><b style = "color: #550058"><i>Check In</i></b></a>
+    <br><br>
+    <a class = "checkOut" data-doc = "<%= student.id %>"><b style = "color: #550058"><i>Check Out</i></b></a>
+    <br><br>
+    <a class = "deleteStudent" data-doc = "<%= student.id %>"><b style = "color: red"><i>Delete Student</i></b></a>
+
+  </div>
+
+  <script>
+    const trashcan = document.querySelector('a.deleteStudent');
+    trashcan.addEventListener('click', (e) => { 
+      const endpoint = `/students/${trashcan.dataset.doc}`;
+      fetch(endpoint, {
+        method: 'DELETE',
+      })
+      .then(response => response.json())
+      .then(data => window.location.href = data.redirect)
+      .catch(err => console.log(err));
+    });
+  </script>
+
+<% if(!student.checkedIn){ %> 
+<script>
+    const checkIn = document.querySelector('a.checkIn');
+    checkIn.addEventListener('click', (e) => {
+      const endpoint = `/students/checkin/${checkIn.dataset.doc}`;
+      fetch(endpoint, {
+        method: 'PUT',
+      })
+      .then(response => response.json())
+      .then(data => window.location.href = data.redirect)
+      .catch(err => console.log(err));
+    });
+  </script>
+<% } %> 
+
+<% if(student.checkedIn){ %> 
+    <script>
+        const checkOut = document.querySelector('a.checkOut');
+        checkOut.addEventListener('click', (e) => {
+          const endpoint = `/students/checkout/${checkOut.dataset.doc}`;
+          fetch(endpoint, {
+            method: 'PUT',
+          })
+          .then(response => response.json())
+          .then(data => window.location.href = data.redirect)
+          .catch(err => console.log(err));
+        });
+      </script>
+<% } %> 
+
+  <%- include("./partials/footer.ejs") %>
+</body>
+</html>

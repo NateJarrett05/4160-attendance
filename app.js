@@ -2,8 +2,11 @@ const express = require("express");
 const { nextTick } = require("process");
 const morgan = require('morgan')
 const mongoose = require("mongoose")
-const Blog = require('./models/blog');
 const { result } = require("lodash");
+const { render } = require("ejs");
+const blogRoutes = require("./routes/blogRoutes")
+const blogController = require("./controllers/blogController");
+const studentController = require("./controllers/studentController")
 
 const app = express();
 
@@ -18,38 +21,12 @@ app.set("view engine", "ejs");
 
 //middleware and static files
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }))
 app.use(morgan("dev"));
-
-//mongoose and mogo sanbox routes
-app.get('/add-blog', (req, res) => {
-    const blog = new Blog({
-        title: "new blog",
-        snippet: "zzz",
-        body: "zzzzzzzz"
-    });
-
-    blog.save()
-        .then((result) => {
-            res.send(result);
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-})
-
-app.get("/all-blogs", (req, res) => {
-    Blog.find()
-        .then((result) => {
-            res.send(result);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-})
 
 //home page
 app.get("/", (req, res) => {
-    res.redirect('/blogs')
+    res.redirect('/students')
 });
 
 //about page
@@ -57,21 +34,11 @@ app.get("/about", (req, res) => {
     res.render('about', { title: 'About' });
 });
 
-//blog routs
-app.get('/blogs', (req, res) => {
-    Blog.find().sort({ createdAt: -1 })
-        .then((result) => {
-            res.render('index', {title: "All Blogs", blogs: result})
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-})
-
 //create page
-app.get("/blogs/create", (req, res) => {
-    res.render('create', { title: 'Create a new blog' });
-});
+app.get("/students/create", studentController.student_create_get);
+
+//blog routing
+app.use("/students", blogRoutes);
 
 //404 page
 app.use((req, res) => {

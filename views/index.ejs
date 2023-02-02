@@ -5,15 +5,17 @@
   <%- include("./partials/nav.ejs") %>
 
   <div class="blogs content">
-    <h2>All Blogs</h2>
+    <h2>All Students</h2>
 
-    <% if (blogs.length > 0) { %>
-      <% blogs.forEach(blog => { %>
-        <h3 class="title"><%= blog.title %></h3>
-        <p class="snippet"><%= blog.snippet %></p>
+    <% if (students.length > 0) { %>
+      <% students.forEach(student => { %>
+        <a class = "single" href = "/students/<%= student.id %>">
+          <h3 class="name"><%= student.name %></h3>
+          <p class="studentID"><%= student.studentID %></p>
+        </a>
       <% }) %>
     <% } else { %>
-      <p>There are no blogs to display...</p>
+      <p>There are no students to display</p>
     <% } %>
     
   </div>
