@@ -5,7 +5,6 @@ const mongoose = require("mongoose")
 const { result } = require("lodash");
 const { render } = require("ejs");
 const blogRoutes = require("./routes/blogRoutes")
-const blogController = require("./controllers/blogController");
 const studentController = require("./controllers/studentController")
 
 const app = express();
@@ -31,7 +30,7 @@ app.get("/", (req, res) => {
 
 //about page
 app.get("/about", (req, res) => {
-    res.render('about', { title: 'About' });
+    res.render('scanner', { title: 'Scanner' });
 });
 
 //create page

@@ -1,0 +1,24 @@
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+
+<body>
+  <%- include("./partials/nav.ejs") %>
+
+  <div class="about content">
+    <h2>Scanner Log In</h2>
+    <form action = "/students/ID" method = "POST">
+      <label for="studentID">StudentID:</label>
+      <input type="text" id="studentID" name="studentID" required>
+      <button>Submit</button>
+    </form>
+
+    <form action = "/students/RFID" method = "POST">
+      <label for="RFID">RFID:</label>
+      <input type="text" id="RFID" name="RFID" required>
+      <button>Submit</button>
+    </form>
+  </div>
+
+  <%- include("./partials/footer.ejs") %>
+</body>
+</html>
